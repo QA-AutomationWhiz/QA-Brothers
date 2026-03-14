@@ -468,11 +468,14 @@
       .process-steps { grid-template-columns: repeat(2,1fr); }
       .projects-grid { grid-template-columns: 1fr; }
       .project-card.featured { grid-column: 1; }
-      .service-row { grid-template-columns: 1fr; gap: 0.3rem; padding: 1.2rem 0; }
+      .service-row { 
+        display: flex; flex-direction: column; align-items: flex-start;
+        gap: 0.4rem; padding: 1.2rem 0; 
+      }
       .sr-num { display: none; }
-      .sr-desc { display: none; }
-      .sr-price { display: block !important; font-size: 0.72rem; margin-top: 0.2rem; }
-      .sr-name { font-size: 1.1rem; }
+      .sr-name { font-size: 1.2rem; }
+      .sr-desc { display: block; font-size: 0.78rem; color: var(--gray); line-height: 1.6; }
+      .sr-price { display: block; font-size: 0.72rem; color: var(--orange); margin-top: 0.2rem; }
     }
     @media (max-width: 640px) {
       .nav-links { display: none; }
@@ -894,7 +897,6 @@
       current = Math.min(Math.max(0, idx), max);
       const gap = 24;
       const wrapW = document.getElementById('tSliderWrap').offsetWidth;
-      const visible = getVisible();
       const cardW = (wrapW - (gap * (visible - 1))) / visible + gap;
       slider.style.transform = `translateX(-${current * cardW}px)`;
       dots.forEach((d, i) => d.classList.toggle('active', i === current));
