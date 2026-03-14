@@ -348,9 +348,10 @@
 
     /* ── TESTIMONIALS ── */
     /* ── TESTIMONIALS SLIDER ── */
-    .testi-slider-wrap { position: relative; overflow: hidden; width: 100%; }
+    .testi-slider-wrap { position: relative; overflow-x: hidden; overflow-y: visible; width: 100%; padding-bottom: 0.5rem; }
     .testi-slider {
       display: flex;
+      align-items: stretch;
       transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: transform;
     }
@@ -358,12 +359,13 @@
       background: #111110;
       border: 1px solid rgba(255,255,255,0.07);
       border-radius: 16px; padding: 2.2rem;
-      position: relative; overflow: hidden;
+      position: relative;
       flex: 0 0 calc(33.333% - 1rem);
       margin-right: 1.5rem;
       min-width: calc(33.333% - 1rem);
       box-sizing: border-box;
       transition: border-color 0.3s;
+      align-self: stretch;
     }
     .testi-card.active-card { border-color: rgba(232,83,26,0.35); }
     .testi-card::before {
@@ -371,7 +373,8 @@
       position: absolute; top: -0.05em; left: 0.6rem;
       font-family: var(--serif); font-size: 7rem;
       color: rgba(232,83,26,0.07); line-height: 1;
-      pointer-events: none;
+      pointer-events: none; z-index: 0;
+      overflow: hidden;
     }
     .testi-stars { display: flex; gap: 0.2rem; margin-bottom: 1rem; }
     .testi-star { color: var(--orange); font-size: 0.82rem; }
@@ -654,7 +657,7 @@
 </section>
 
 <!-- TESTIMONIALS -->
-<section id="testimonials" class="section" style="background:var(--black);overflow:hidden">
+<section id="testimonials" class="section" style="background:var(--black)">
   <div class="section-inner">
     <p class="section-label reveal">What clients say</p>
     <h2 class="services-title reveal" style="font-family:var(--display);font-size:clamp(3rem,6vw,6rem);letter-spacing:-0.01em;line-height:0.95;margin-bottom:4rem">
