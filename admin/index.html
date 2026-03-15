@@ -1095,6 +1095,7 @@
             </div>
             <div class="inbox-time">${timeStr}</div>
           </div>
+          ${m.service ? `<div style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(0,245,160,0.08);border:1px solid rgba(0,245,160,0.15);border-radius:100px;padding:0.2rem 0.7rem;font-size:0.7rem;color:var(--accent);font-family:'Space Mono',monospace;margin-bottom:0.6rem">🛠️ ${m.service}</div>` : ''}
           <div class="inbox-body">${m.message}</div>
           <div class="inbox-actions">
             ${!m.read ? `<button class="btn-read" onclick="markRead('${m.id}')">✓ Mark as Read</button>` : `<span style="font-size:0.72rem;color:var(--muted)">✓ Read</span>`}

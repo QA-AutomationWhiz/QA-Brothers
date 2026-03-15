@@ -32,6 +32,26 @@
     .nav-back:hover{color:var(--white)}
     .nav-hire{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);background:var(--orange);padding:0.5rem 1.4rem;border-radius:100px;text-decoration:none;transition:background 0.2s}
     .nav-hire:hover{background:var(--orange2)}
+    .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;background:none;border:none}
+    .hamburger span{display:block;width:20px;height:1.5px;background:var(--white);border-radius:2px;transition:all 0.3s}
+    .nav-mobile{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(10,10,9,0.97);border-bottom:1px solid rgba(255,255,255,0.06);padding:1.5rem 2rem;z-index:99;flex-direction:column;gap:1rem}
+    .nav-mobile.open{display:flex}
+    .nav-mobile a{color:rgba(245,243,238,0.7);text-decoration:none;font-size:0.9rem;padding:0.4rem 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+    .nav-mobile a:last-child{border:none;color:var(--orange)}
+    @media(max-width:640px){
+      nav{padding:1rem 1.5rem}
+      .nav-right .nav-back,.nav-right .nav-hire{display:none}
+      .hamburger{display:flex}
+      .samples-hero{padding:120px 1.5rem 3rem}
+      .filter-section{padding:1.5rem 1.5rem 0}
+      .samples-section{padding:0 1.5rem 4rem}
+      .samples-grid{grid-template-columns:1fr}
+      .filter-tabs{gap:0.4rem}
+      .filter-tab{font-size:0.62rem;padding:0.3rem 0.7rem}
+      .modal-stats{grid-template-columns:repeat(2,1fr)}
+      .modal-body{padding:1.2rem}
+      .modal{margin:1rem;max-height:90vh}
+    }
 
     /* HERO */
     .samples-hero{padding:140px 3rem 5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
@@ -46,7 +66,7 @@
 
     /* FILTER TABS */
     .filter-section{padding:2.5rem 3rem 0;max-width:1200px;margin:0 auto}
-    .filter-tabs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .filter-tabs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2.5rem;overflow-x:auto;padding-bottom:0.5rem;-webkit-overflow-scrolling:touch;scrollbar-width:none}
     .filter-tab{font-family:var(--mono);font-size:0.68rem;color:var(--gray);border:1px solid var(--border);padding:0.4rem 1rem;border-radius:100px;cursor:pointer;transition:all 0.2s;background:transparent;text-transform:uppercase;letter-spacing:0.08em}
     .filter-tab:hover{border-color:rgba(255,255,255,0.2);color:var(--white)}
     .filter-tab.active{background:var(--orange);border-color:var(--orange);color:var(--white)}
@@ -145,8 +165,15 @@
   <div class="nav-right">
     <a href="index.html" class="nav-back">← Back to Home</a>
     <a href="index.html#contact" class="nav-hire">Hire Us</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
   </div>
 </nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="index.html">← Back to Home</a>
+  <a href="index.html#services">Services</a>
+  <a href="index.html#projects">Work</a>
+  <a href="index.html#contact">Hire Us</a>
+</div>
 
 <!-- HERO -->
 <section class="samples-hero">
@@ -289,7 +316,8 @@
     try {
       const snap = await getDocs(query(collection(db, 'samples'), orderBy('order', 'asc')));
       const fbSamples = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      allSamples = fbSamples.length ? fbSamples : defaultSamples;
+      // Always show default samples + any Firebase samples on top
+      allSamples = fbSamples.length ? [...fbSamples, ...defaultSamples] : defaultSamples;
     } catch(e) {
       allSamples = defaultSamples;
     }
@@ -414,6 +442,15 @@
       renderSamples();
     });
   });
+
+  // Hamburger menu
+  const ham = document.getElementById('hamburger');
+  const navMob = document.getElementById('navMobile');
+  if (ham) {
+    ham.addEventListener('click', () => {
+      navMob.classList.toggle('open');
+    });
+  }
 
   loadSamples();
 </script>

@@ -69,6 +69,8 @@
     }
     .nav-logo span { color: var(--orange); }
     .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { font-size: 0.72rem; font-weight: 500; color: rgba(245,243,238,0.6); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
     .nav-links a:hover { color: var(--white); }
@@ -503,7 +505,18 @@
       .sr-price { display: block; font-size: 0.72rem; color: var(--orange); margin-top: 0.2rem; }
     }
     @media (max-width: 640px) {
+      .hamburger { display: flex; }
       .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: fixed; top: 60px; left: 0; right: 0;
+        background: rgba(10,10,9,0.98);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        padding: 1.5rem 2rem; z-index: 99; gap: 1.2rem;
+      }
+      .nav-links.open li { border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.8rem; }
+      .nav-links.open a { font-size: 1rem; }
+      .nav-hire { display: none; }
       .hero-title { font-size: clamp(3rem,14vw,5rem); }
       .hero-bottom { flex-direction: column; gap: 2rem; align-items: flex-start; }
       .hero-stats { gap: 2rem; }
@@ -522,7 +535,7 @@
 <nav>
   <a href="#" class="nav-logo">QA <span>Brothers</span></a>
   <div class="nav-right">
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#projects">Work</a></li>
@@ -530,6 +543,7 @@
       <li><a href="samples.html">Samples</a></li>
     </ul>
     <a href="#contact" class="nav-hire">Hire Us</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -975,6 +989,31 @@
     });
 
     goTo(0);
+        // Hamburger
+    const hamburgerBtn = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    if (hamburgerBtn) {
+      hamburgerBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+        const spans = hamburgerBtn.querySelectorAll('span');
+        if (navLinks.classList.contains('open')) {
+          spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+          spans[1].style.opacity = '0';
+          spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+        } else {
+          spans[0].style.transform = '';
+          spans[1].style.opacity = '';
+          spans[2].style.transform = '';
+        }
+      });
+      // Close on nav link click
+      navLinks.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          navLinks.classList.remove('open');
+          hamburgerBtn.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+        });
+      });
+    }
     window.addEventListener('resize', () => goTo(current));
   }
 
