@@ -170,6 +170,7 @@
       <div class="sidebar-item" data-panel="hero">🏠 Hero</div>
       <div class="sidebar-item" data-panel="services">⚙️ Services</div>
       <div class="sidebar-item" data-panel="projects">💼 Projects</div>
+      <div class="sidebar-item" data-panel="samples">📋 Samples</div>
       <div class="sidebar-item" data-panel="skills">🛠️ Skills</div>
       <div class="sidebar-label">Settings</div>
       <div class="sidebar-item" data-panel="testimonials">⭐ Testimonials</div>
@@ -285,6 +286,68 @@
 
         <div class="or-divider">── Existing Projects ──</div>
         <div id="projectsList"></div>
+      </div>
+
+
+      <!-- SAMPLES -->
+      <div class="panel" id="panel-samples">
+        <div class="panel-header">
+          <h2 class="panel-title">Sample Reports</h2>
+          <p class="panel-sub">Add QA audit samples — dikhenge samples.html page pe</p>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">➕ Add New Sample</div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Project Name</label><input type="text" class="form-input" id="sp-name" placeholder="E-commerce Checkout Audit"/></div>
+            <div class="form-group"><label class="form-label">Type</label>
+              <select class="form-select" id="sp-type">
+                <option>QA Audit</option><option>Mobile Testing</option><option>API Testing</option>
+                <option>Performance</option><option>Security Testing</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Source Name</label><input type="text" class="form-input" id="sp-source" placeholder="GitHub Open Source Project"/></div>
+            <div class="form-group"><label class="form-label">Source URL (optional)</label><input type="url" class="form-input" id="sp-sourceurl" placeholder="https://github.com/..."/></div>
+          </div>
+          <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="sp-desc" placeholder="What did you test and what was the scope?"></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Total Bugs Found</label><input type="number" class="form-input" id="sp-bugs" placeholder="14"/></div>
+            <div class="form-group"><label class="form-label">Critical Bugs</label><input type="number" class="form-input" id="sp-critical" placeholder="3"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Time Taken</label><input type="text" class="form-input" id="sp-time" placeholder="4h"/></div>
+            <div class="form-group"><label class="form-label">Difficulty</label>
+              <select class="form-select" id="sp-difficulty">
+                <option>Easy</option><option selected>Medium</option><option>Hard</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Recommendations</label><textarea class="form-textarea" id="sp-rec" placeholder="Top recommendations from this audit..."></textarea></div>
+          <div class="form-section-title" style="margin-top:1rem">Tools Used</div>
+          <div id="sp-tools-container" class="tags-container"></div>
+          <div class="form-row">
+            <div class="form-group"><input type="text" class="form-input" id="sp-tool-input" placeholder="e.g. Postman"/></div>
+            <div class="form-group" style="justify-content:flex-end"><button class="btn-add" id="sp-add-tool-btn" style="margin-top:auto">+ Add Tool</button></div>
+          </div>
+          <div class="form-section-title" style="margin-top:1rem">Bugs List</div>
+          <div id="sp-bugs-list" style="margin-bottom:0.8rem"></div>
+          <div class="form-section" style="background:var(--surface2);margin-bottom:0">
+            <div class="form-section-title">Add Bug</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Severity</label>
+                <select class="form-select" id="sp-bug-sev"><option value="critical">🔴 Critical</option><option value="medium">🟡 Medium</option><option value="minor">🟢 Minor</option></select>
+              </div>
+              <div class="form-group"><label class="form-label">Bug Title</label><input type="text" class="form-input" id="sp-bug-title" placeholder="Payment button not working"/></div>
+            </div>
+            <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="sp-bug-desc" placeholder="Detailed description..." style="min-height:60px"></textarea></div>
+            <div class="form-group"><label class="form-label">Steps to Reproduce</label><input type="text" class="form-input" id="sp-bug-steps" placeholder="1. Open app → 2. Click → 3. Error"/></div>
+            <button class="btn-add" id="sp-add-bug-btn" style="width:100%">+ Add Bug</button>
+          </div>
+          <button class="btn-save" id="addSampleBtn" style="margin-top:1.5rem;width:100%">Add Sample →</button>
+        </div>
+        <div class="or-divider">── Existing Samples ──</div>
+        <div id="samplesList"></div>
       </div>
 
       <!-- SKILLS -->
@@ -489,7 +552,7 @@
 
   // ── LOAD ALL ──
   async function loadAll() {
-    await Promise.all([loadHero(), loadServices(), loadProjects(), loadSkills(), loadContact(), loadInbox(), loadTestimonials()]);
+    await Promise.all([loadHero(), loadServices(), loadProjects(), loadSkills(), loadContact(), loadInbox(), loadTestimonials(), loadSamples()]);
   }
 
   // ── HERO ──
@@ -875,6 +938,124 @@
       await deleteDoc(doc(db, "testimonials", id));
       toast("Testimonial deleted");
       loadTestimonials();
+    } catch(e) { toast("Error", true); }
+  };
+
+
+  // ── SAMPLES ──
+  let spTools = [], spBugs = [];
+
+  async function loadSamples() {
+    try {
+      const snap = await getDocs(query(collection(db, "samples"), orderBy("order","asc")));
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderSamplesList(items);
+    } catch(e) { renderSamplesList([]); }
+  }
+
+  function renderSamplesList(items) {
+    const list = document.getElementById("samplesList");
+    if (!items.length) {
+      list.innerHTML = `<div style="color:var(--muted);text-align:center;padding:2rem;border:1px dashed rgba(0,245,160,0.15);border-radius:10px">No samples yet — add your first one!</div>`;
+      return;
+    }
+    list.innerHTML = items.map(s => `
+      <div class="item-card">
+        <div class="item-card-header">
+          <div>
+            <div class="item-card-title">${s.name}</div>
+            <div class="item-card-sub">${s.type} · ${s.difficulty} · ${s.stats?.bugs||0} bugs · ${s.stats?.time||''}</div>
+          </div>
+          <div class="item-card-actions">
+            <button class="btn-danger" onclick="deleteSample('${s.id}')">Delete</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  // Tools for sample
+  document.getElementById("sp-add-tool-btn").addEventListener("click", () => {
+    const val = document.getElementById("sp-tool-input").value.trim();
+    if (!val) return;
+    spTools.push(val);
+    document.getElementById("sp-tool-input").value = "";
+    renderSpTools();
+  });
+  document.getElementById("sp-tool-input").addEventListener("keydown", e => { if(e.key==="Enter") document.getElementById("sp-add-tool-btn").click(); });
+
+  function renderSpTools() {
+    document.getElementById("sp-tools-container").innerHTML = spTools.map((t,i) => `
+      <div class="tag-item"><span>${t}</span><span class="tag-remove" onclick="removeSpTool(${i})">×</span></div>`).join('');
+  }
+  window.removeSpTool = (i) => { spTools.splice(i,1); renderSpTools(); };
+
+  // Bugs for sample
+  document.getElementById("sp-add-bug-btn").addEventListener("click", () => {
+    const title = document.getElementById("sp-bug-title").value.trim();
+    if (!title) return;
+    spBugs.push({
+      severity: document.getElementById("sp-bug-sev").value,
+      title,
+      desc: document.getElementById("sp-bug-desc").value.trim(),
+      steps: document.getElementById("sp-bug-steps").value.trim()
+    });
+    document.getElementById("sp-bug-title").value = "";
+    document.getElementById("sp-bug-desc").value = "";
+    document.getElementById("sp-bug-steps").value = "";
+    renderSpBugs();
+  });
+
+  function renderSpBugs() {
+    const colors = { critical: '#ff5f57', medium: '#ffbd2e', minor: '#28c840' };
+    document.getElementById("sp-bugs-list").innerHTML = spBugs.map((b,i) => `
+      <div style="background:var(--surface2);border:1px solid rgba(255,255,255,0.06);border-left:3px solid ${colors[b.severity]};border-radius:8px;padding:0.8rem 1rem;margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:0.82rem;font-weight:600">${b.title}</div>
+          <div style="font-size:0.72rem;color:var(--muted)">${b.severity}</div>
+        </div>
+        <button class="btn-danger" onclick="removeSpBug(${i})">×</button>
+      </div>`).join('');
+  }
+  window.removeSpBug = (i) => { spBugs.splice(i,1); renderSpBugs(); };
+
+  document.getElementById("addSampleBtn").addEventListener("click", async () => {
+    const name = document.getElementById("sp-name").value.trim();
+    if (!name) { toast("Project name zaroori hai", true); return; }
+    const btn = document.getElementById("addSampleBtn");
+    btn.textContent = "Adding..."; btn.disabled = true;
+    try {
+      await addDoc(collection(db, "samples"), {
+        name,
+        type: document.getElementById("sp-type").value,
+        source: document.getElementById("sp-source").value.trim(),
+        sourceUrl: document.getElementById("sp-sourceurl").value.trim(),
+        desc: document.getElementById("sp-desc").value.trim(),
+        difficulty: document.getElementById("sp-difficulty").value,
+        stats: {
+          bugs: parseInt(document.getElementById("sp-bugs").value)||0,
+          critical: parseInt(document.getElementById("sp-critical").value)||0,
+          time: document.getElementById("sp-time").value.trim()
+        },
+        recommendations: document.getElementById("sp-rec").value.trim(),
+        tools: spTools,
+        bugs: spBugs,
+        order: Date.now()
+      });
+      toast("Sample added! 📋");
+      ["sp-name","sp-source","sp-sourceurl","sp-desc","sp-bugs","sp-critical","sp-time","sp-rec"].forEach(id => document.getElementById(id).value = "");
+      spTools = []; spBugs = [];
+      renderSpTools(); renderSpBugs();
+      loadSamples();
+    } catch(e) { toast("Error adding sample", true); }
+    btn.textContent = "Add Sample →"; btn.disabled = false;
+  });
+
+  window.deleteSample = async (id) => {
+    if (!confirm("Delete this sample?")) return;
+    try {
+      await deleteDoc(doc(db, "samples", id));
+      toast("Sample deleted");
+      loadSamples();
     } catch(e) { toast("Error", true); }
   };
 

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sample QA Reports — QA Brothers</title>
+  <meta name="description" content="Real QA audit samples by QA Brothers — See exactly what you get before hiring us."/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23E8531A'/><text x='32' y='44' font-family='Georgia,serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'>QB</text></svg>"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --black:#0A0A09; --white:#F5F3EE; --cream:#EDE9DF;
+      --orange:#E8531A; --orange2:#FF6B35;
+      --gray:#888880; --border:rgba(255,255,255,0.08);
+      --display:'Bebas Neue',sans-serif;
+      --serif:'Instrument Serif',serif;
+      --sans:'DM Sans',sans-serif;
+      --mono:'JetBrains Mono',monospace;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--black);color:var(--white);font-family:var(--sans);font-weight:300;line-height:1.6;overflow-x:hidden}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,9,0.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06)}
+    .nav-logo{font-family:var(--display);font-size:1.4rem;letter-spacing:0.05em;color:var(--white);text-decoration:none}
+    .nav-logo span{color:var(--orange)}
+    .nav-right{display:flex;align-items:center;gap:2rem}
+    .nav-back{font-size:0.78rem;color:var(--gray);text-decoration:none;transition:color 0.2s}
+    .nav-back:hover{color:var(--white)}
+    .nav-hire{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--white);background:var(--orange);padding:0.5rem 1.4rem;border-radius:100px;text-decoration:none;transition:background 0.2s}
+    .nav-hire:hover{background:var(--orange2)}
+
+    /* HERO */
+    .samples-hero{padding:140px 3rem 5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+    .samples-hero::before{content:'SAMPLES';position:absolute;right:-0.05em;bottom:0;font-family:var(--display);font-size:clamp(120px,18vw,220px);color:rgba(255,255,255,0.02);line-height:1;pointer-events:none;user-select:none}
+    .hero-inner{max-width:1200px;margin:0 auto}
+    .hero-tag{display:inline-flex;align-items:center;gap:0.6rem;border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.4rem 1.1rem;margin-bottom:2rem;font-family:var(--mono);font-size:0.68rem;color:var(--gray);background:rgba(255,255,255,0.03)}
+    .hero-title{font-family:var(--display);font-size:clamp(3rem,8vw,7rem);line-height:0.92;letter-spacing:-0.01em;margin-bottom:1.5rem}
+    .hero-title em{font-family:var(--serif);font-style:italic;color:var(--orange)}
+    .hero-sub{font-size:1rem;color:var(--gray);max-width:560px;line-height:1.75;margin-bottom:2.5rem}
+    .hero-cta{display:inline-flex;align-items:center;gap:0.5rem;background:var(--orange);color:var(--white);padding:0.85rem 2rem;border-radius:6px;text-decoration:none;font-size:0.875rem;font-weight:500;transition:background 0.2s,transform 0.15s}
+    .hero-cta:hover{background:var(--orange2);transform:translateY(-1px)}
+
+    /* FILTER TABS */
+    .filter-section{padding:2.5rem 3rem 0;max-width:1200px;margin:0 auto}
+    .filter-tabs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .filter-tab{font-family:var(--mono);font-size:0.68rem;color:var(--gray);border:1px solid var(--border);padding:0.4rem 1rem;border-radius:100px;cursor:pointer;transition:all 0.2s;background:transparent;text-transform:uppercase;letter-spacing:0.08em}
+    .filter-tab:hover{border-color:rgba(255,255,255,0.2);color:var(--white)}
+    .filter-tab.active{background:var(--orange);border-color:var(--orange);color:var(--white)}
+
+    /* SAMPLES GRID */
+    .samples-section{padding:0 3rem 6rem;max-width:1200px;margin:0 auto}
+    .samples-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.5rem}
+
+    /* SAMPLE CARD */
+    .sample-card{background:#111110;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;cursor:pointer}
+    .sample-card:hover{transform:translateY(-4px);border-color:rgba(232,83,26,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.4)}
+    .sc-header{padding:1.5rem 1.5rem 0;display:flex;justify-content:space-between;align-items:flex-start}
+    .sc-type{font-family:var(--mono);font-size:0.62rem;color:var(--orange);text-transform:uppercase;letter-spacing:0.12em;background:rgba(232,83,26,0.08);padding:0.25rem 0.6rem;border-radius:4px}
+    .sc-difficulty{font-size:0.65rem;padding:0.22rem 0.6rem;border-radius:100px;font-weight:500}
+    .diff-easy{background:rgba(76,175,80,0.12);color:#66BB6A}
+    .diff-medium{background:rgba(255,152,0,0.12);color:#FFA726}
+    .diff-hard{background:rgba(244,67,54,0.12);color:#EF5350}
+    .sc-body{padding:1.2rem 1.5rem 1.5rem}
+    .sc-name{font-family:var(--display);font-size:1.4rem;letter-spacing:0.01em;margin-bottom:0.4rem;line-height:1.1}
+    .sc-source{font-family:var(--mono);font-size:0.65rem;color:var(--gray);margin-bottom:0.8rem;display:flex;align-items:center;gap:0.4rem}
+    .sc-source a{color:var(--orange);text-decoration:none}
+    .sc-source a:hover{text-decoration:underline}
+    .sc-desc{font-size:0.82rem;color:rgba(245,243,238,0.6);line-height:1.7;margin-bottom:1.2rem}
+    .sc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1.2rem}
+    .sc-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:0.6rem 0.5rem;text-align:center}
+    .sc-stat-val{font-family:var(--display);font-size:1.2rem;color:var(--orange);display:block;line-height:1}
+    .sc-stat-key{font-size:0.6rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.2rem;display:block}
+    .sc-bugs{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.2rem}
+    .sc-bug{display:flex;align-items:flex-start;gap:0.6rem;font-size:0.78rem;line-height:1.5}
+    .bug-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:0.3rem}
+    .bug-critical{background:#EF5350}
+    .bug-medium{background:#FFA726}
+    .bug-minor{background:#66BB6A}
+    .sc-footer{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.05)}
+    .sc-tools{display:flex;gap:0.4rem;flex-wrap:wrap}
+    .sc-tool{font-family:var(--mono);font-size:0.6rem;color:var(--gray);border:1px solid rgba(255,255,255,0.07);padding:0.15rem 0.5rem;border-radius:4px}
+    .sc-report-btn{font-size:0.72rem;color:var(--orange);font-family:var(--mono);text-decoration:none;display:flex;align-items:center;gap:0.3rem;transition:gap 0.2s}
+    .sc-report-btn:hover{gap:0.6rem}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity 0.3s}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal{background:#111110;border:1px solid rgba(255,255,255,0.1);border-radius:20px;width:100%;max-width:760px;max-height:85vh;overflow-y:auto;position:relative}
+    .modal-close{position:sticky;top:0;display:flex;justify-content:flex-end;padding:1rem 1.5rem;background:#111110;border-bottom:1px solid rgba(255,255,255,0.05);z-index:1}
+    .modal-close button{background:rgba(255,255,255,0.06);border:none;color:var(--white);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;transition:background 0.2s}
+    .modal-close button:hover{background:rgba(255,255,255,0.12)}
+    .modal-body{padding:2rem}
+    .modal-type{font-family:var(--mono);font-size:0.65rem;color:var(--orange);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.8rem}
+    .modal-title{font-family:var(--display);font-size:2.5rem;line-height:0.95;margin-bottom:0.5rem;letter-spacing:0.01em}
+    .modal-source{font-family:var(--mono);font-size:0.7rem;color:var(--gray);margin-bottom:1.5rem}
+    .modal-source a{color:var(--orange);text-decoration:none}
+    .modal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin-bottom:2rem}
+    .modal-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:1rem;text-align:center}
+    .modal-stat-val{font-family:var(--display);font-size:1.8rem;color:var(--orange);display:block}
+    .modal-stat-key{font-size:0.65rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.2rem;display:block}
+    .modal-section{margin-bottom:1.8rem}
+    .modal-section-title{font-family:var(--mono);font-size:0.65rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+    .modal-section-title::before{content:'';display:block;width:20px;height:1px;background:var(--orange)}
+    .bug-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:1rem;margin-bottom:0.8rem;border-left:3px solid}
+    .bug-item.critical{border-left-color:#EF5350}
+    .bug-item.medium{border-left-color:#FFA726}
+    .bug-item.minor{border-left-color:#66BB6A}
+    .bug-item-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem}
+    .bug-item-title{font-size:0.875rem;font-weight:500}
+    .bug-severity{font-size:0.62rem;font-weight:600;padding:0.2rem 0.6rem;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em}
+    .sev-critical{background:rgba(244,67,54,0.15);color:#EF5350}
+    .sev-medium{background:rgba(255,152,0,0.15);color:#FFA726}
+    .sev-minor{background:rgba(76,175,80,0.15);color:#66BB6A}
+    .bug-item-desc{font-size:0.78rem;color:var(--gray);line-height:1.6}
+    .bug-steps{font-size:0.72rem;color:rgba(245,243,238,0.4);font-family:var(--mono);margin-top:0.4rem;line-height:1.8}
+    .modal-cta{background:var(--orange);color:var(--white);border:none;padding:1rem 2rem;border-radius:8px;font-family:var(--sans);font-size:0.9rem;font-weight:500;cursor:pointer;width:100%;letter-spacing:0.02em;transition:background 0.2s}
+    .modal-cta:hover{background:var(--orange2)}
+
+    /* EMPTY STATE */
+    .empty-state{text-align:center;padding:6rem 2rem;color:var(--gray)}
+    .empty-state h3{font-family:var(--display);font-size:2rem;margin-bottom:0.5rem;color:rgba(245,243,238,0.2)}
+
+    /* LOADING */
+    .loading{text-align:center;padding:6rem;font-family:var(--mono);font-size:0.72rem;color:var(--gray)}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      nav{padding:1rem 1.5rem}
+      .samples-hero,.filter-section,.samples-section{padding-left:1.5rem;padding-right:1.5rem}
+      .samples-grid{grid-template-columns:1fr}
+      .modal-stats{grid-template-columns:repeat(2,1fr)}
+      .modal-body{padding:1.5rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">QA <span>Brothers</span></a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back">← Back to Home</a>
+    <a href="index.html#contact" class="nav-hire">Hire Us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="samples-hero">
+  <div class="hero-inner">
+    <div class="hero-tag">📋 Real work samples</div>
+    <h1 class="hero-title">See our work<br><em>before you hire.</em></h1>
+    <p class="hero-sub">These are real QA audits we performed on public apps and websites. Every bug, every report — exactly what you'll get when you work with us.</p>
+    <a href="index.html#contact" class="hero-cta">Get Your Free Audit →</a>
+  </div>
+</section>
+
+<!-- FILTER -->
+<div class="filter-section" id="filterSection">
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-filter="all">All Samples</button>
+    <button class="filter-tab" data-filter="QA Audit">QA Audit</button>
+    <button class="filter-tab" data-filter="Mobile Testing">Mobile Testing</button>
+    <button class="filter-tab" data-filter="API Testing">API Testing</button>
+    <button class="filter-tab" data-filter="Performance">Performance</button>
+    <button class="filter-tab" data-filter="Security Testing">Security</button>
+  </div>
+</div>
+
+<!-- SAMPLES -->
+<div class="samples-section">
+  <div class="samples-grid" id="samplesGrid">
+    <div class="loading">Loading samples...</div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-close"><button id="modalClose">✕</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD3QIpkDZNXlF0J8OsDKlPhQJ-3SPVknww",
+    authDomain: "testpilot-portfolio.firebaseapp.com",
+    projectId: "testpilot-portfolio",
+    storageBucket: "testpilot-portfolio.firebasestorage.app",
+    messagingSenderId: "1000194447539",
+    appId: "1:1000194447539:web:e9a12a2eab646dbd6ab8c6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Default samples — shown if Firebase empty
+  const defaultSamples = [
+    {
+      id: 's1',
+      type: 'QA Audit',
+      name: 'E-commerce Checkout Flow',
+      source: 'Public Demo App',
+      sourceUrl: '',
+      desc: 'Full QA audit of a WooCommerce-based online store. Focused on checkout, payment flow, and mobile responsiveness.',
+      difficulty: 'Medium',
+      stats: { bugs: 14, critical: 3, time: '4h' },
+      tools: ['Manual Testing', 'Chrome DevTools', 'BrowserStack'],
+      bugs: [
+        { severity: 'critical', title: 'Payment button unresponsive on Android Chrome', desc: 'On Android Chrome 118+, the "Place Order" button does not trigger any action. Users cannot complete purchases on mobile.', steps: '1. Open cart → 2. Fill checkout form → 3. Tap "Place Order" on Android → 4. Nothing happens' },
+        { severity: 'critical', title: 'Guest checkout skips address validation', desc: 'Submitting empty address fields as a guest user does not throw any error — order gets placed with blank shipping address.' },
+        { severity: 'critical', title: 'Order confirmation email not sent', desc: 'After successful payment, no confirmation email is delivered to the user. SMTP configuration issue identified.' },
+        { severity: 'medium', title: 'Coupon code field accepts expired codes', desc: 'Expired promo codes still show "Applied!" message but do not apply any discount to the total.' },
+        { severity: 'medium', title: 'Product images not loading on slow 3G', desc: 'Images fail to load on simulated 3G connection with no placeholder/fallback shown.' },
+        { severity: 'minor', title: 'Spelling error on returns policy page', desc: '"Refund will be procssed" — missing letter in "processed".' },
+      ],
+      recommendations: 'Fix critical payment flow issues before launch. Implement proper form validation on guest checkout. Set up SMTP monitoring.'
+    },
+    {
+      id: 's2',
+      type: 'Mobile Testing',
+      name: 'Food Delivery App (Android)',
+      source: 'GitHub Open Source Project',
+      sourceUrl: 'https://github.com',
+      desc: 'Mobile-first testing of a React Native food delivery app across 6 Android devices and 3 iOS devices.',
+      difficulty: 'Hard',
+      stats: { bugs: 21, critical: 5, time: '6h' },
+      tools: ['Android Studio', 'Appium', 'Manual Testing', 'iOS Simulator'],
+      bugs: [
+        { severity: 'critical', title: 'App crashes on Android 12 during location permission prompt', desc: 'Force close occurs immediately when the app requests location permission on Android 12 devices.', steps: '1. Fresh install → 2. Open app → 3. Accept location prompt → 4. App crashes' },
+        { severity: 'critical', title: 'Cart items disappear after app backgrounding', desc: 'If user switches to another app and returns, all cart items are cleared without warning.' },
+        { severity: 'medium', title: 'Search results not scrollable on iPhone SE (1st gen)', desc: 'Search results list overflows the screen and cannot be scrolled on smaller screen sizes.' },
+        { severity: 'medium', title: 'Estimated delivery time shows negative value', desc: '"Estimated delivery: -3 mins" appears when restaurant is very close to user location.' },
+        { severity: 'minor', title: 'Back button navigation inconsistent', desc: 'Pressing Android back button from order summary returns to home instead of previous screen.' },
+      ],
+      recommendations: 'Priority: fix Android 12 crash — blocks all new Android users. Cart persistence needs state management fix.'
+    },
+    {
+      id: 's3',
+      type: 'API Testing',
+      name: 'REST API — User Auth Service',
+      source: 'JSONPlaceholder + Custom Endpoints',
+      sourceUrl: 'https://jsonplaceholder.typicode.com',
+      desc: 'Comprehensive API testing of a RESTful authentication service. Tested all endpoints for functionality, security, and edge cases.',
+      difficulty: 'Medium',
+      stats: { bugs: 9, critical: 2, time: '3h' },
+      tools: ['Postman', 'Newman', 'Manual Testing'],
+      bugs: [
+        { severity: 'critical', title: 'JWT token not invalidated on logout', desc: 'After calling /logout, the old JWT token remains valid for the full 24h expiry period. Major security risk.', steps: '1. POST /login → get token → 2. POST /logout → 3. Use old token on /profile → 4. Still returns 200 OK' },
+        { severity: 'critical', title: 'Password reset endpoint has no rate limiting', desc: 'POST /forgot-password can be called unlimited times with same email. Enables email flooding attack.' },
+        { severity: 'medium', title: 'GET /users returns passwords in response', desc: 'Password hash visible in API response — should be excluded from all user objects.' },
+        { severity: 'medium', title: '500 error on special characters in username', desc: 'Username field with characters like < > & causes internal server error instead of validation message.' },
+        { severity: 'minor', title: 'Inconsistent error response format', desc: 'Some endpoints return {error: "..."} others return {message: "..."} — should be standardized.' },
+      ],
+      recommendations: 'Implement token blacklisting on logout. Add rate limiting to all auth endpoints. Standardize API error responses.'
+    },
+    {
+      id: 's4',
+      type: 'Performance',
+      name: 'News Portal — Page Speed Audit',
+      source: 'Public News Website',
+      sourceUrl: '',
+      desc: 'Performance audit of a high-traffic news portal. Used Lighthouse, WebPageTest, and manual analysis to identify speed bottlenecks.',
+      difficulty: 'Easy',
+      stats: { bugs: 7, critical: 2, time: '2h' },
+      tools: ['PageSpeed Insights', 'Lighthouse', 'Chrome DevTools', 'GTmetrix'],
+      bugs: [
+        { severity: 'critical', title: 'PageSpeed score 31/100 on mobile', desc: 'Largest Contentful Paint (LCP) is 8.2 seconds on mobile. Google recommends under 2.5s. This is hurting SEO ranking significantly.', steps: 'Run PageSpeed Insights → Mobile score: 31 → LCP: 8.2s' },
+        { severity: 'critical', title: 'Unoptimized images adding 4.2MB on homepage', desc: '47 uncompressed PNG images loaded on homepage. Converting to WebP and lazy loading would reduce load by 78%.' },
+        { severity: 'medium', title: 'Render-blocking JavaScript delaying first paint', desc: '3 JS files loaded in <head> without async/defer — delay first content render by 1.8 seconds.' },
+        { severity: 'medium', title: 'No caching headers on static assets', desc: 'CSS, JS, and images have no cache-control headers. Every visit re-downloads all assets.' },
+        { severity: 'minor', title: 'Third-party scripts loaded synchronously', desc: 'Analytics and ad scripts loaded synchronously. Should be async to not block rendering.' },
+      ],
+      recommendations: 'Implementing image optimization alone would improve load time by 60%. Quick wins: add cache headers, defer JS, compress images.'
+    }
+  ];
+
+  let allSamples = [];
+  let activeFilter = 'all';
+
+  async function loadSamples() {
+    try {
+      const snap = await getDocs(query(collection(db, 'samples'), orderBy('order', 'asc')));
+      const fbSamples = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      allSamples = fbSamples.length ? fbSamples : defaultSamples;
+    } catch(e) {
+      allSamples = defaultSamples;
+    }
+    renderSamples();
+  }
+
+  function renderSamples() {
+    const grid = document.getElementById('samplesGrid');
+    const filtered = activeFilter === 'all' ? allSamples : allSamples.filter(s => s.type === activeFilter);
+
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="empty-state"><h3>NO SAMPLES YET</h3><p>Samples for this category coming soon.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(s => {
+      const diffClass = s.difficulty === 'Hard' ? 'diff-hard' : s.difficulty === 'Medium' ? 'diff-medium' : 'diff-easy';
+      const topBugs = (s.bugs || []).slice(0, 3);
+      return `
+        <div class="sample-card" onclick="openModal('${s.id}')">
+          <div class="sc-header">
+            <span class="sc-type">${s.type}</span>
+            <span class="sc-difficulty ${diffClass}">${s.difficulty || 'Medium'}</span>
+          </div>
+          <div class="sc-body">
+            <div class="sc-name">${s.name}</div>
+            <div class="sc-source">
+              ${s.sourceUrl ? `<a href="${s.sourceUrl}" target="_blank" onclick="event.stopPropagation()">🔗 ${s.source}</a>` : `📁 ${s.source}`}
+            </div>
+            <div class="sc-desc">${s.desc}</div>
+            <div class="sc-stats">
+              <div class="sc-stat"><span class="sc-stat-val">${s.stats?.bugs || 0}</span><span class="sc-stat-key">Total Bugs</span></div>
+              <div class="sc-stat"><span class="sc-stat-val" style="color:#EF5350">${s.stats?.critical || 0}</span><span class="sc-stat-key">Critical</span></div>
+              <div class="sc-stat"><span class="sc-stat-val">${s.stats?.time || '—'}</span><span class="sc-stat-key">Audit Time</span></div>
+            </div>
+            <div class="sc-bugs">
+              ${topBugs.map(b => `
+                <div class="sc-bug">
+                  <div class="bug-dot bug-${b.severity}"></div>
+                  <span style="color:rgba(245,243,238,0.65)">${b.title}</span>
+                </div>`).join('')}
+              ${(s.bugs||[]).length > 3 ? `<div class="sc-bug"><div class="bug-dot" style="background:var(--gray)"></div><span style="color:var(--gray)">+${s.bugs.length - 3} more bugs in full report</span></div>` : ''}
+            </div>
+            <div class="sc-footer">
+              <div class="sc-tools">${(s.tools||[]).map(t => `<span class="sc-tool">${t}</span>`).join('')}</div>
+              <span class="sc-report-btn">View Report →</span>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  window.openModal = (id) => {
+    const s = allSamples.find(x => x.id === id);
+    if (!s) return;
+    const overlay = document.getElementById('modalOverlay');
+    const body = document.getElementById('modalBody');
+
+    const bugsByGroup = { critical: [], medium: [], minor: [] };
+    (s.bugs || []).forEach(b => {
+      if (bugsByGroup[b.severity]) bugsByGroup[b.severity].push(b);
+    });
+
+    body.innerHTML = `
+      <div class="modal-type">${s.type} · Sample Report</div>
+      <div class="modal-title">${s.name}</div>
+      <div class="modal-source">Source: ${s.sourceUrl ? `<a href="${s.sourceUrl}" target="_blank">${s.source} ↗</a>` : s.source}</div>
+      <div class="modal-stats">
+        <div class="modal-stat"><span class="modal-stat-val">${s.stats?.bugs || 0}</span><span class="modal-stat-key">Total Issues</span></div>
+        <div class="modal-stat"><span class="modal-stat-val" style="color:#EF5350">${s.stats?.critical || 0}</span><span class="modal-stat-key">Critical</span></div>
+        <div class="modal-stat"><span class="modal-stat-val">${(s.bugs||[]).filter(b=>b.severity==='medium').length}</span><span class="modal-stat-key">Medium</span></div>
+        <div class="modal-stat"><span class="modal-stat-val">${s.stats?.time || '—'}</span><span class="modal-stat-key">Time Taken</span></div>
+      </div>
+
+      ${Object.entries(bugsByGroup).filter(([,bugs]) => bugs.length > 0).map(([sev, bugs]) => `
+        <div class="modal-section">
+          <div class="modal-section-title">${sev === 'critical' ? '🔴 Critical' : sev === 'medium' ? '🟡 Medium' : '🟢 Minor'} Issues (${bugs.length})</div>
+          ${bugs.map(b => `
+            <div class="bug-item ${sev}">
+              <div class="bug-item-header">
+                <div class="bug-item-title">${b.title}</div>
+                <span class="bug-severity sev-${sev}">${sev}</span>
+              </div>
+              <div class="bug-item-desc">${b.desc}</div>
+              ${b.steps ? `<div class="bug-steps">${b.steps}</div>` : ''}
+            </div>`).join('')}
+        </div>`).join('')}
+
+      ${s.recommendations ? `
+        <div class="modal-section">
+          <div class="modal-section-title">💡 Our Recommendations</div>
+          <div style="font-size:0.875rem;color:rgba(245,243,238,0.7);line-height:1.75;background:rgba(255,255,255,0.03);padding:1rem;border-radius:8px;border:1px solid rgba(255,255,255,0.06)">${s.recommendations}</div>
+        </div>` : ''}
+
+      <div style="margin-top:2rem;padding:1.5rem;background:rgba(232,83,26,0.06);border:1px solid rgba(232,83,26,0.15);border-radius:12px;margin-bottom:1.5rem">
+        <div style="font-family:var(--display);font-size:1.2rem;margin-bottom:0.4rem">Want this for YOUR app?</div>
+        <div style="font-size:0.82rem;color:var(--gray);margin-bottom:1rem">We'll find bugs like these in your product — free first audit.</div>
+        <button class="modal-cta" onclick="window.location.href='index.html#contact'">Get Free Audit →</button>
+      </div>`;
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Filter tabs
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeFilter = tab.dataset.filter;
+      renderSamples();
+    });
+  });
+
+  loadSamples();
+</script>
+</body>
+</html>

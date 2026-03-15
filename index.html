@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>QA Brothers — We test. You impress.</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23E8531A'/><text x='32' y='44' font-family='Georgia,serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'>QB</text></svg>"/>
   <meta name="description" content="QA Brothers — Elite QA & Test Automation agency. We find every bug before your users do."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -505,6 +506,7 @@
       <li><a href="#services">Services</a></li>
       <li><a href="#projects">Work</a></li>
       <li><a href="#contact">Contact</a></li>
+      <li><a href="samples.html">Samples</a></li>
     </ul>
     <a href="#contact" class="nav-hire">Hire Us</a>
   </div>
@@ -694,9 +696,22 @@
       </div>
       <div class="reveal reveal-d1">
         <form class="cf" id="contactForm">
-          <div class="cf-group"><label class="cf-label">Name</label><input type="text" class="cf-input" placeholder="Your name" required/></div>
-          <div class="cf-group"><label class="cf-label">Email</label><input type="email" class="cf-input" placeholder="you@company.com" required/></div>
-          <div class="cf-group"><label class="cf-label">Message</label><textarea class="cf-textarea" placeholder="Tell us about your project..." required></textarea></div>
+          <div class="cf-group"><label class="cf-label">Name</label><input type="text" class="cf-input" id="cf-name" placeholder="Your name" required/></div>
+          <div class="cf-group"><label class="cf-label">Email</label><input type="email" class="cf-input" id="cf-email" placeholder="you@company.com" required/></div>
+          <div class="cf-group">
+            <label class="cf-label">Service Needed</label>
+            <select class="cf-input" id="cf-service" required style="cursor:pointer">
+              <option value="" disabled selected>Select a service...</option>
+              <option value="QA Audit">QA Audit (from ₹5,000)</option>
+              <option value="Test Automation">Test Automation Setup</option>
+              <option value="Mobile Testing">Mobile Testing</option>
+              <option value="API Testing">API Testing</option>
+              <option value="Security Testing">Security Testing</option>
+              <option value="Monthly Retainer">Monthly Retainer</option>
+              <option value="Not Sure">Not Sure — Let's Talk</option>
+            </select>
+          </div>
+          <div class="cf-group"><label class="cf-label">Message</label><textarea class="cf-textarea" id="cf-message" placeholder="Tell us about your project..." required></textarea></div>
           <button type="submit" class="cf-btn">Send Message →</button>
         </form>
       </div>
@@ -993,9 +1008,10 @@
       const btn = e.target.querySelector('.cf-btn');
       const inputs = e.target.querySelectorAll('input, textarea');
       
-      const name    = e.target.querySelector('input[type="text"]').value.trim();
-      const email   = e.target.querySelector('input[type="email"]').value.trim();
-      const message = e.target.querySelector('textarea').value.trim();
+      const name    = document.getElementById('cf-name').value.trim();
+      const email   = document.getElementById('cf-email').value.trim();
+      const service = document.getElementById('cf-service').value.trim();
+      const message = document.getElementById('cf-message').value.trim();
 
       btn.textContent = 'Sending...';
       btn.disabled = true;
@@ -1003,7 +1019,7 @@
       try {
         // 1. Save to Firestore
         await addDoc(collection(db, "contacts"), {
-          name, email, message,
+          name, email, service, message,
           timestamp: new Date().toISOString(),
           read: false
         });
@@ -1015,7 +1031,7 @@
 
         if (WHATSAPP_NUMBER !== "YOUR_WHATSAPP_NUMBER") {
           const waMsg = encodeURIComponent(
-            `🔔 New Contact - QA Brothers!\n\n👤 Name: ${name}\n📧 Email: ${email}\n💬 Message: ${message}`
+            `🔔 New Contact - QA Brothers!\n\n👤 Name: ${name}\n📧 Email: ${email}\n🛠️ Service: ${service}\n💬 Message: ${message}`
           );
           await fetch(`https://api.callmebot.com/whatsapp.php?phone=${WHATSAPP_NUMBER}&text=${waMsg}&apikey=${CALLMEBOT_KEY}`)
             .catch(() => {}); // silently fail if WA not configured
