@@ -338,6 +338,27 @@
     .cf-input:focus, .cf-textarea:focus { border-color: var(--orange); background: rgba(232,83,26,0.04); }
     .cf-textarea { min-height: 120px; resize: none; }
     .cf-input::placeholder, .cf-textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .cf-input option {
+      background: #1a1a18;
+      color: var(--white);
+      padding: 0.5rem;
+    }
+    .cf-input option:disabled {
+      color: rgba(255,255,255,0.25);
+    }
+    select.cf-input {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+      color: var(--white);
+    }
+    select.cf-input:invalid, select.cf-input option[value=""] {
+      color: rgba(255,255,255,0.2);
+    }
     .cf-btn {
       background: var(--orange); color: var(--white); border: none;
       padding: 1rem; border-radius: 6px; font-family: var(--sans);
@@ -700,7 +721,7 @@
           <div class="cf-group"><label class="cf-label">Email</label><input type="email" class="cf-input" id="cf-email" placeholder="you@company.com" required/></div>
           <div class="cf-group">
             <label class="cf-label">Service Needed</label>
-            <select class="cf-input" id="cf-service" required style="cursor:pointer">
+            <select class="cf-input" id="cf-service" required>
               <option value="" disabled selected>Select a service...</option>
               <option value="QA Audit">QA Audit (from ₹5,000)</option>
               <option value="Test Automation">Test Automation Setup</option>
