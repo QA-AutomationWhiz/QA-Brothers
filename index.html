@@ -989,31 +989,6 @@
     });
 
     goTo(0);
-        // Hamburger
-    const hamburgerBtn = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    if (hamburgerBtn) {
-      hamburgerBtn.addEventListener('click', () => {
-        navLinks.classList.toggle('open');
-        const spans = hamburgerBtn.querySelectorAll('span');
-        if (navLinks.classList.contains('open')) {
-          spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-          spans[1].style.opacity = '0';
-          spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-        } else {
-          spans[0].style.transform = '';
-          spans[1].style.opacity = '';
-          spans[2].style.transform = '';
-        }
-      });
-      // Close on nav link click
-      navLinks.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => {
-          navLinks.classList.remove('open');
-          hamburgerBtn.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
-        });
-      });
-    }
     window.addEventListener('resize', () => goTo(current));
   }
 
@@ -1044,6 +1019,33 @@
   }
 
   function initUI() {
+    // Hamburger menu
+    const hamburgerBtn = document.getElementById('hamburger');
+    const navLinksList = document.getElementById('navLinks');
+    if (hamburgerBtn && navLinksList) {
+      hamburgerBtn.addEventListener('click', () => {
+        navLinksList.classList.toggle('open');
+        const spans = hamburgerBtn.querySelectorAll('span');
+        if (navLinksList.classList.contains('open')) {
+          spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+          spans[1].style.opacity = '0';
+          spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+        } else {
+          spans[0].style.transform = '';
+          spans[1].style.opacity = '';
+          spans[2].style.transform = '';
+        }
+      });
+      navLinksList.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          navLinksList.classList.remove('open');
+          hamburgerBtn.querySelectorAll('span').forEach(s => {
+            s.style.transform = ''; s.style.opacity = '';
+          });
+        });
+      });
+    }
+
     // Reveal on scroll
     const revObs = new IntersectionObserver(entries => {
       entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
